@@ -1,0 +1,7 @@
+<template>
+        <template for:each={rowInfo} for:item="currentRow">
+            <td class="slds-truncate" key={currentRow.data} title={currentRow.fieldName}>
+                <c-cell cell-info={currentRow} api-name={apiName} row-id={rowId}></c-cell>
+            </td>
+        </template>
+</template>

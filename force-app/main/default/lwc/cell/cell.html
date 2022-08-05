@@ -1,0 +1,48 @@
+<template>
+    <template if:true={isText}>
+        <lightning-formatted-text value={cellInfo.data}></lightning-formatted-text>
+    </template>
+    <template if:true={isPhone}>
+        <lightning-formatted-phone value={cellInfo.data}></lightning-formatted-phone>
+    </template>
+    <template if:true={isEmail}>
+        <lightning-formatted-email value={cellInfo.data} hide-icon></lightning-formatted-email>
+    </template>
+    <template if:true={isDate}>
+        <lightning-formatted-date-time value={cellInfo.data} time-zone="UTC"></lightning-formatted-date-time>
+    </template>
+    <template if:true={isDateTime}>
+        <lightning-formatted-date-time value={cellInfo.data} hour="2-digit" year="numeric" month="numeric"
+                                       day="numeric" minute="2-digit" time-zone-name="short">
+        </lightning-formatted-date-time>
+    </template>
+    <template if:true={isAddress}>
+        <lightning-formatted-address street={cellInfo.data.street}></lightning-formatted-address>
+    </template>
+    <template if:true={isPercent}>
+        <lightning-formatted-number value={cellInfo.data} format-style="percent"></lightning-formatted-number>
+    </template>
+    <template if:true={isDecimal}>
+        <lightning-formatted-number value={cellInfo.data} format-style="decimal"></lightning-formatted-number>
+    </template>
+    <template if:true={isCurrency}>
+        <lightning-formatted-number value={cellInfo.data} format-style="currency"></lightning-formatted-number>
+    </template>
+    <template if:true={isUrl}>
+        <lightning-formatted-url value={cellInfo.data} target="_blank"></lightning-formatted-url>
+    </template>
+    <template if:true={isBool}>
+        <template if:true={cellInfo.data}>
+            <lightning-icon icon-name="action:approval" size="xx-small"></lightning-icon>
+        </template>
+        <template if:false={cellInfo.data}>
+            <lightning-icon icon-name="action:close" size="xx-small"></lightning-icon>
+        </template>
+    </template>
+    <template if:true={isInteger}>
+        <lightning-formatted-number value={cellInfo.data}></lightning-formatted-number>
+    </template>
+    <template if:true={isReference}>
+        <lightning-button variant="base" label={cellInfo.data} title="Navigate to Record" onclick={navigateToRecord}></lightning-button>
+    </template>
+</template>

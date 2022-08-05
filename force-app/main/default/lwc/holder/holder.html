@@ -1,0 +1,91 @@
+<template>
+    <lightning-card>
+        <lightning-layout>
+            <lightning-layout-item size="4" horizontal-align="center" vertical-align="end">
+                <div class="slds-var-m-bottom_large slds-var-p-right_medium">
+                    <lightning-combobox options={options} onchange={changeDataType} value={dataType} label="Data Type"></lightning-combobox>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="4">
+                <div class="slds-var-m-top_large">
+                    <lightning-button icon-name="utility:settings" onclick={openColumnCreation}></lightning-button>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
+    <template if:true={columnModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeColumnCreation}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                        Data Table Manager
+                    </h2>
+                </header>
+                <!--<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-card>
+                        <lightning-input value={newCol} label="Column Title" onchange={handleTitleInputChange}></lightning-input>
+                        <lightning-input value={newColField} label="Column Field Name" onchange={handleFieldInputChange}></lightning-input>
+                        <lightning-combobox options={typeOptions} value={newColType} placeholder="Select Value" onchange={handleTypeInputChange}></lightning-combobox>
+                        <span>Note: Field Names must align with the required FieldName specified by Salesforce, they can be found <a target="_blank" href="https://developer.salesforce.com/docs/atlas.en-us.238.0.sfFieldRef.meta/sfFieldRef/salesforce_field_reference_Contact.htm">here</a></span>
+                        <br />
+                    </lightning-card>
+                </div>-->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-layout>
+                        <lightning-layout-item size="5">
+                            <div class="slds-box">
+                                <lightning-card title="Unselected Choices">
+                                    <lightning-layout class="slds-scrollable" style="height:10rem;" multiple-rows>
+                                        <template for:each={unselectedOptions} for:item="unselectedOption">
+                                            <lightning-layout-item onclick={handleToSelect} size="12" data-id={unselectedOption.value} key={unselectedOption.value}>
+                                                <p class="slds-p-around_x-small slds-text-link_reset">{unselectedOption.label}</p>
+                                            </lightning-layout-item>
+                                        </template>
+                                    </lightning-layout>
+                                </lightning-card>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="1">
+                            <div class="slds-p-around_x-small slds-var-m-top_xx-large">
+                                <lightning-button-icon icon-name="utility:forward" onclick={selectChoice}></lightning-button-icon>
+                                <lightning-button-icon icon-name="utility:back" onclick={deselectChoice}></lightning-button-icon>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="5">
+                            <div class="slds-box">
+                                <lightning-card title="Selected Choices">
+                                    <lightning-layout class="slds-scrollable" style="height:10rem;" multiple-rows>
+                                        <template for:each={selectedOptions} for:item="selectedOption">
+                                            <lightning-layout-item size="12" key={selectedOption.value} onclick={handleToDeselect} data-id={selectedOption.value}>
+                                                <p class="slds-p-around_x-small slds-text-link_reset">{selectedOption.label}</p>
+                                            </lightning-layout-item>
+                                        </template>
+                                    </lightning-layout>
+                                </lightning-card>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="1">
+                            <div class="slds-p-around_x-small">
+                                <lightning-button-icon icon-name="utility:arrowup" onclick={moveCurrentUp}></lightning-button-icon>
+                                <lightning-button-icon icon-name="utility:arrowdown" onclick={moveCurrentDown}></lightning-button-icon>
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={closeColumnCreation} title="Close">Close Manager</button>
+                </footer>
+
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    
+    <template if:true={columnReset}>
+        <c-datatable columns={columns} onsortcolumn={handleColumnSort} ondeletecolumn={handleColumnDelete} onupdatecolumn={handleColumnUpdate} rows={rows} api-name={dataType}></c-datatable>
+    </template>
+</template>

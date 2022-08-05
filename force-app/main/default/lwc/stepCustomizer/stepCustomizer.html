@@ -1,0 +1,106 @@
+<template>
+    <lightning-layout multiple-rows class="slds-align_absolute-center">
+        <template if:true={stepEdit}>
+            <lightning-layout-item size="12" padding="around-small">
+                <h1 class="slds-text-heading_small">{stepLabel}</h1>
+                <lightning-input label="Step Title" onchange={handleTitleChange}></lightning-input>
+                <lightning-input label="Step Name" onchange={handleNameChange}></lightning-input>
+            </lightning-layout-item>
+        </template>
+        <template if:false={stepEdit}>
+            <lightning-layout-item size="12" padding="around-small">
+                <h1 class="slds-text-heading_small">{elementLabel}</h1>
+                <lightning-input label="Element Title" onchange={handleTitleChange}></lightning-input>
+                <lightning-input label="Element Name" onchange={handleNameChange}></lightning-input>
+            </lightning-layout-item>
+        </template>
+        <lightning-layout-item>
+            <lightning-button class="slds-m-top_small" variant="brand" label="Save Changes" onclick={update}></lightning-button>
+        </lightning-layout-item>
+        <lightning-layout-item size="12" padding="around-small">
+            <lightning-combobox
+                name="conditionals"
+                label="Condition Type"
+                value={value}
+                placeholder="Show Element if True"
+                options={options}
+                onchange={handleConditionalChange}>
+            </lightning-combobox>
+            <div class="slds-box">
+                <template for:each={conditionsArr} for:item="condition">
+                    <lightning-layout key={condition.id}>
+                        <lightning-layout-item size="8">
+                            <h1>{condition.string}</h1>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="4">
+                            <button data-name={condition.id} class="slds-button slds-button_icon" title="Close" onclick={deleteCondition}>
+                                <lightning-icon data-name={condition.id} icon-name="utility:delete" alternative-text="close" size="x-small"></lightning-icon>
+                            </button>
+                            <button data-name={condition.id} class="slds-button slds-button_icon" title="Close" onclick={editCondition}>
+                                <lightning-icon data-name={condition.id} icon-name="utility:edit" alternative-text="close" size="x-small"></lightning-icon>
+                            </button>
+                        </lightning-layout-item>
+                    </lightning-layout>         
+                </template>
+                <a onclick={conditionalPopUp}>Show Element if True</a>
+            </div>
+        </lightning-layout-item>
+    </lightning-layout>
+
+    <template if:true={isModalOpen}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                        Edit Show Hide Rules
+                    </h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item size="12">
+                            <lightning-combobox 
+                            name="modalConditionals"
+                            value={modalValue}
+                            placeholder="All Conditions Are Met"
+                            options={modalOptions}
+                            onchange={handleModalComboChange}>
+                        </lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="4">
+                            <lightning-combobox
+                                name="modalFields"
+                                label="Field"
+                                value={modalFieldsValue}
+                                placeholder=""
+                                options={modalFieldOptions}
+                                onchange={handleModalFieldChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="4">    
+                            <lightning-combobox
+                                name="operators"
+                                label="Operator"
+                                value={modalOperatorValue}
+                                placeholder="Equal To"
+                                options={modalOperatorOptions}
+                                onchange={handleModalOperatorChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="4">
+                            <lightning-input label="Value" value={modalInput} onchange={handleModalValueChange}></lightning-input>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={closeModal} title="Cancel">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick={addCondition} title="Save">Save</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

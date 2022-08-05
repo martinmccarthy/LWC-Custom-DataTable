@@ -1,0 +1,9 @@
+.selectable:hover{
+    outline: 2px royalblue;
+    outline-style:dashed;
+}
+
+.isSelected {
+    outline: 2px solid royalblue;
+    outline-style:solid;
+}

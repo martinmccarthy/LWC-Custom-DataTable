@@ -1,0 +1,87 @@
+<template>
+    <div class="slds-float_right">
+        <template if:true={elementSelected}>
+            <lightning-button-group class="selectedGroup" style="background-color:white;">
+                <lightning-button class="deleteBtn" icon-name="utility:delete" alternative-text="Delete" title="Delete" variant="base" onclick={elementDeleteHandler} value={element}></lightning-button><br/>
+                <lightning-button icon-name="utility:relate" alternative-text="Replicate" title="Replicate" variant="base"></lightning-button><br/>
+            </lightning-button-group>
+        </template>
+    </div>
+    <br /><br />
+    <div class={isElementSelectedClass} onclick={handleElementSelect}>
+        <template if:true={isButton}>
+            <lightning-button label={element.title} ></lightning-button>
+            <br/>
+        </template>
+        <template if:true={isLabel}>
+            <p>{element.title}</p>
+            <br/>
+        </template>
+        <template if:true={isCheckbox}>
+            <lightning-input type="checkbox" checked={checkedValue} value={element.value} label={element.title} onchange={handleElementValueChange}></lightning-input>
+            <br/>
+        </template>
+        <template if:true={isCurrency}>
+            <lightning-input type="decimal" formatter="currency" value={element.value} step="0.01" label={element.title} onchange={handleElementValueChange}></lightning-input>
+            <br/>
+        </template>
+        <template if:true={isDate}>
+            <lightning-input type="date" value={element.value} label={element.title} onchange={handleElementValueChange}></lightning-input>
+            <br/>
+        </template>
+        <template if:true={isDateTime}>
+            <lightning-input type="datetime" value={element.value} label={element.title} onchange={handleElementValueChange}></lightning-input>
+            <br/>
+        </template>
+        <template if:true={isEmail}>
+            <lightning-input type="email" value={element.value} label={element.title} onchange={handleElementValueChange}></lightning-input>
+            <br/>
+        </template>
+        <template if:true={isFile}>
+            <lightning-input type="file" label={element.title} onchange={handleElementValueChange}></lightning-input>
+            <br/>
+        </template>
+        <template if:true={isPassword}>
+            <lightning-input type="password" label={element.title} value={element.value} onchange={handleElementValueChange}></lightning-input>
+            <br/>
+        </template>
+        <template if:true={isNumber}>
+            <lightning-input type="number" label={element.title} value={element.value} onchange={handleElementValueChange}></lightning-input>
+            <br/>
+        </template>
+        <template if:true={isRange}>
+            <lightning-slider label={element.title} value={element.value} onchange={handleElementValueChange}></lightning-slider>
+            <br/>
+        </template>
+        <template if:true={isTelephone}>
+            <lightning-input type="tel" label={element.title} value={element.value} onchange={handleElementValueChange}></lightning-input>
+            <br/>
+        </template>
+        <template if:true={isText}>
+            <lightning-input type="text" label={element.title} value={element.value} onchange={handleElementValueChange}></lightning-input>
+            <br/>
+        </template>
+        <!-- Need to add functionality to the HTML below this line -->
+        <template if:true={isTime}>
+            <lightning-input type="time" label={element.title} value={element.value} onchange={handleElementValueChange}></lightning-input>
+            <br/>
+        </template>
+        <template if:true={isUrl}>
+            <lightning-input type="url" label={element.title} value={element.value} onchange={handleElementValueChange}></lightning-input>
+            <br/>
+        </template>
+        <template if:true={isLineBreak}>
+            <br /><br />
+        </template>
+        <template if:true={isPost}>
+            <lightning-card >
+                <div class="slds-p-around_x-small">
+                    <slot name="header"></slot>
+                    <h1 class="slds-text-heading_large">{element.title}</h1>
+                    <label>DataRaptor Post Action</label>
+                </div>
+            </lightning-card>
+        </template>
+
+    </div>
+</template>

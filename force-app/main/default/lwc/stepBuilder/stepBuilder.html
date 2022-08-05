@@ -1,0 +1,58 @@
+<template>
+    <lightning-layout myltuple-rows style="background: white;">
+        <lightning-layout-item size="12">
+            <lightning-tabset active-tab-value={selectedTabValue}>
+                <lightning-tab label="Build" value="buildtab" onactive={tabChangeHandler}>
+                    <lightning-accordion class="builder-accordion">
+                        <lightning-accordion-section name="Actions" label="Actions">
+                            <div class="slds-scrollable" style="height:5rem;">
+                                <template for:each={actionItems} for:item="item">
+                                    <div key={item.itemType}>
+                                        <c-build-item item={item} idtag={item.id}></c-build-item>
+                                    </div>
+                                </template>
+                            </div>
+                        </lightning-accordion-section>
+                        <lightning-accordion-section name="Display" label="Display">
+                            <div class="slds-scrollable" style="height:5rem;">
+                                <template for:each={displayItems} for:item="item">
+                                    <div key={item.itemType}>
+                                        <c-build-item item={item} idtag={item.id}></c-build-item>
+                                    </div>
+                                </template>
+                            </div>
+                        </lightning-accordion-section>
+                        <lightning-accordion-section name="Groups" label="Groups">
+                            <div class="slds-scrollable" style="height:5rem;">
+                                <template for:each={groupItems} for:item="item">
+                                    <div key={item.itemType}>
+                                        <c-build-item item={item} idtag={item.id}></c-build-item>
+                                    </div>
+                                </template>
+                            </div>
+                        </lightning-accordion-section>
+                        <lightning-accordion-section name="Inputs" label="Inputs">
+                           <div class="slds-scrollable" style="height:10rem;">
+                                <template for:each={inputItems} for:item="item">
+                                    <div key={item.itemType}>
+                                        <c-build-item item={item} idtag={item.id}></c-build-item>
+                                    </div>
+                                </template>
+                           </div>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                </lightning-tab>
+                    <lightning-tab label="Customize" value="customizetab" onactive={tabChangeHandler}>
+                        <c-step-customizer build-mode={buildMode} step={step} element={element} steps={allSteps} step-condition-arr={stepConditionArr} element-condition-arr={elementConditionArr}></c-step-customizer>
+                        
+                        <!--<template if:true={stepFound}>
+                            <c-step-customizer step-edit={stepFound} onstepsaved={updateSteps} steps={allSteps} step-id={stepId}></c-step-customizer>
+                        </template>
+                        <template if:true={elementFound}>
+                            <c-step-customizer onstepsaved={updateSteps} onelementsaved={updateElements} element-id={elementId} element-type={elementType} steps={allSteps}></c-step-customizer>
+                        </template>-->
+                    </lightning-tab>
+            </lightning-tabset>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

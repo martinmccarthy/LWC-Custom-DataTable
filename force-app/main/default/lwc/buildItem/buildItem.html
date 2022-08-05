@@ -1,0 +1,19 @@
+<template>
+    <lightning-card draggable="true" ondragstart={dragStart} id={idtag} class="buildItem">
+        <lightning-layout>
+            <lightning-layout-item class="slds-p-around_xx-small">
+                <lightning-icon icon-name="utility:drag_and_drop" alternative-text="drag and drop icon"></lightning-icon>
+            </lightning-layout-item>
+            <lightning-layout-item>
+                <!--<lightning-icon icon-name={icon} alternative-text="dragitemicon"></lightning-icon>-->
+            </lightning-layout-item>
+            <lightning-layout-item class="slds-p-around_xx-small">
+                <lightning-icon icon-name={item.icon} alternative-text="itemIcon"></lightning-icon>
+            </lightning-layout-item>
+            <lightning-layout-item>
+                <p class="slds-text-heading_small">{item.itemType}</p>
+                <p class="slds-text-body_small">Render a {item.itemType} onto the page</p>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
+</template>

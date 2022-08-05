@@ -1,0 +1,63 @@
+<template>
+    <div>
+        <table class="slds-table slds-table_cell-buffer slds-table_fixed-layout slds-table_bordered slds-table_resizable-cols">
+            <thead>
+                <template if:true={columnReset}>
+                    <tr class="slds-line-height_reset">
+                        <template for:each={columnDisplay} for:item="column">
+                            <th key={column.title} scope="col" data-id={column.fieldName} id={column.title} class="slds-is-resizable slds-is-sortable slds-p-around_x-small">
+                                <div class="slds-truncate" title={column.title}>
+                                    <span onclick={sortByColumn} data-id={column.fieldName}>{column.title}</span>
+                                    <lightning-button-icon class="slds-float_right slds-p-right_medium" icon-name="utility:delete" alternative-text="Delete" title="Delete" size="xx-small" onclick={deleteColumn} data-id={column.title}></lightning-button-icon>
+                                    <lightning-button-icon class="slds-float_right" icon-name="utility:edit" alternative-text="Edit" title="Edit" size="xx-small" onclick={editColumn} data-id={column.title}></lightning-button-icon>
+                                </div>
+                                <div class="slds-resizable" data-id={column.fieldName} onmousedown={registerDrag} onmouseout={deregisterDrag} onmouseup={deregisterDrag} onmousemove={resizeColumn}>
+                                    <input type="range" aria-label="Name column width" class="slds-resizable__input slds-assistive-text" max="1000" min="500" tabindex="0" />
+                                    <span class="slds-resizable__handle">
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </th>
+                        </template>
+                    </tr>
+                </template>
+            </thead>
+            <tbody>
+                <template for:each={displayRows} for:item="row">
+                    <c-row key={row.Id} row={row} columns={columns} row-id={row.Id} api-name={apiName}></c-row>
+                </template>
+            </tbody>
+        </table>
+    </div>
+
+    <template if:true={modalOpen}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                        Edit Column: {currentCol}
+                    </h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item size="8">
+                            <lightning-input value={colTitle} label="Column Title" onchange={handleEditTitle}></lightning-input>
+                            <lightning-input value={colField} label="Column Field Name" onchange={handleEditField}></lightning-input>
+                            <lightning-combobox options={typeOptions} value={colType} placeholder="Select Value" onchange={handleEditType}></lightning-combobox>
+                        </lightning-layout-item>                            
+                    </lightning-layout>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={closeModal} title="Cancel">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick={saveColumn} title="Save">Save</button>
+                </footer>
+
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>
