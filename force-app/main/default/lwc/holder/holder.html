@@ -86,6 +86,6 @@
     </template>
     
     <template if:true={columnReset}>
-        <c-datatable columns={columns} onsortcolumn={handleColumnSort} ondeletecolumn={handleColumnDelete} onupdatecolumn={handleColumnUpdate} rows={rows} api-name={dataType}></c-datatable>
+        <c-datatable  ongetpagecount={handlePageCountValue} ongetrecordcountvalue={handleRecordCountValue} columns={columns} onsortcolumn={handleColumnSort} ondeletecolumn={handleColumnDelete} onupdatecolumn={handleColumnUpdate} rows={rows} api-name={dataType}></c-datatable>
     </template>
 </template>

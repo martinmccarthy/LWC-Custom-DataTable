@@ -25,10 +25,17 @@ public with sharing class DataTableController {
 
                         Schema.DisplayType referenceFieldDataType = referenceFields.get(referenceKey).getDescribe().getType();
 
+                         
+
+                        String referenceFieldLabel = referenceFields.get(referenceKey).getDescribe().getLabel(); 
+
+                        System.debug(referenceFieldLabel);
+
                         String referenceFieldType = '' + referenceFieldDataType;
                         List<String> currentField = new List<String>();
                         currentField.add(referenceFieldType);
                         currentField.add(referenceKey);
+                        currentField.add(referenceFieldLabel);
                         fieldStrings.put(referenceFieldName, currentField);
                         //System.debug(referenceFieldName);
                     }
@@ -40,8 +47,14 @@ public with sharing class DataTableController {
             }
             else {
                 List<String> currentField = new List<String>();
+
+                String fieldLabel = fields.get(key).getDescribe().getLabel(); 
+
+                System.debug(fieldLabel);
+
                 currentField.add(fieldType);
                 currentField.add(key);
+                currentField.add(fieldLabel);
                 fieldStrings.put(fieldName, currentField);
             }
         }
@@ -49,13 +62,22 @@ public with sharing class DataTableController {
     }
     
     @AuraEnabled(cacheable=true) 
-    public static List<SObject> getDataList(List<String> fieldsArray, String sortQuery, String sortOrder, String dataType) {
+    public static List<SObject> getDataList(List<String> fieldsArray, String sortQuery, String sortOrder, String dataType, String numberOfRecords, String pageNumber) {
+
         try {
-            System.debug(fieldsArray);
+            // System.debug(fieldsArray);
             if(fieldsArray.size() == 0 || fieldsArray == null || dataType == null) {
                 List<SObject> emptyList = new List<SObject>{};
                 return emptyList;
             }    // we aren't getting anything, just return empty array
+
+            if (string.isBlank(numberOfRecords)) { 
+                numberOfRecords = '10';
+            }
+
+            
+
+            Integer offset = (Integer.valueOf(pageNumber) -1)*Integer.valueOf(numberOfRecords);
 
             Set<String> fields = Schema.getGlobalDescribe().get(dataType).getDescribe().fields.getMap().keySet();
             Map<String, Schema.SObjectType> objResult = Schema.getGlobalDescribe();
@@ -88,16 +110,20 @@ public with sharing class DataTableController {
                 List<SObject> emptyList = new List<SObject>{};
                 return emptyList;
             }
-            System.debug(fieldsString);
+            // System.debug(fieldsString);
             List<SObject> dataList;
             if(String.isBlank(sortQuery) || !(fields.contains(sortQuery.toLowerCase()))) {
-                dataList = Database.query('SELECT Id, ' + fieldsString  + ' FROM ' + dataType + ' LIMIT 10');
+                dataList = Database.query('SELECT Id, ' + fieldsString  + ' FROM ' + dataType + ' LIMIT ' + numberOfRecords);
+                // ' LIMIT 30'
             }
             else {
-                dataList = Database.query('SELECT Id, ' + fieldsString + ' FROM ' + dataType + ' ORDER BY ' + sortQuery + ' ' + sortOrder + ' NULLS LAST LIMIT 10');
+                dataList = Database.query('SELECT Id, ' + fieldsString + ' FROM ' + dataType + ' ORDER BY ' + sortQuery + ' ' + sortOrder + ' LIMIT ' + numberOfRecords);
+                // ' NULLS LAST LIMIT 30'
             }
             return dataList;
         }
+
+    
         catch(Exception e) {
             throw new AuraHandledException(e.getMessage());
         }
