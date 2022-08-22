@@ -6,13 +6,10 @@ export default class Cell extends NavigationMixin(LightningElement) {
     @api apiName;
     @api rowId;
 
-    connectedCallback(){ var parsedCell = JSON.parse(JSON.stringify(this.cellInfo)) 
-        // console.log(parsedCell)
-    };
     // Navigate to View Record Page
     navigateToRecord() {
-        // console.log(this.apiName);
-        // console.log(this.rowId);
+        console.log(this.apiName);
+        console.log(this.rowId);
         this[NavigationMixin.Navigate]({
             type: 'standard__recordPage',
             attributes: {
@@ -63,16 +60,15 @@ export default class Cell extends NavigationMixin(LightningElement) {
         return false;
     }
 
-    get isPercent() {
+    get isPerecent() {
         var parsedCell = JSON.parse(JSON.stringify(this.cellInfo));
         if(parsedCell.type === 'percent') return true;
-       
         return false;
     }
 
     get isDecimal() {
         var parsedCell = JSON.parse(JSON.stringify(this.cellInfo));
-        if(parsedCell.type === 'decimal' || parsedCell.type === 'double') return true;
+        if(parsedCell.type === 'decimal') return true;
         return false;
     }
 
@@ -96,7 +92,7 @@ export default class Cell extends NavigationMixin(LightningElement) {
 
     get isInteger() {
         var parsedCell = JSON.parse(JSON.stringify(this.cellInfo));
-        if(parsedCell.type === 'number') return true;
+        if(parsedCell.type === 'int') return true;
         return false;
     }
 

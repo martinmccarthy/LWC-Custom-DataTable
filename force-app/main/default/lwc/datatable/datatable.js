@@ -1,6 +1,4 @@
-import { LightningElement, api, track } from 'lwc';
-import getDataList from '@salesforce/apex/DataTableController.getDataList';
-
+import { LightningElement, api } from 'lwc';
 
 export default class Datatable extends LightningElement {
     @api columns;
@@ -25,19 +23,18 @@ export default class Datatable extends LightningElement {
     colX = 0;
     currentResize = '';
 
-
-    @track pageNumber = 1;
-    @track totalRecords = 0;
-    @track totalPages = 0;
-    recordsPerPage;
-
-    options = [
-        { label: '10', value: '10'},
-        { label: '20', value: '20'},
-        { label: '30', value: '30'},
-        { label: '40', value: '40'},
-        { label: '50', value: '50'},
-        { label: '60', value: '60'}
+    typeOptions = [
+        {label: "Text", value: "text"},
+        {label: "Phone", value: "phone"},
+        {label: "Email", value: "email"},
+        {label: "Date", value: "date"},
+        {label: "Address", value: "address"},
+        {label: "Percent", value: "percent"},
+        {label: "Decimal", value: "decimal"},
+        {label: "Currency", value: "currency"},
+        {label: "Url", value: "url"},
+        {label: "Boolean", value: "bool"},
+        {label: "Integer", value: "int"}
 
     ]
 
@@ -52,47 +49,6 @@ export default class Datatable extends LightningElement {
     }
 
 
-
-    handleComboBoxChange(event){
-        this.pageNumber = 1;
-        this.recordsPerPage = event.target.value;
-        console.log('Number of records to Display' , this.recordsPerPage);
-        this.handleChange();
- 
-    }
-
-
-    handleChange(){
-        const recordCountEvent = new CustomEvent('getrecordcountvalue', {
-            detail: this.recordsPerPage
-        });
-
-        const pageCount = new CustomEvent('getPageCount', {
-            detail: this.pageNumber
-        });
-
-        this.dispatchEvent(recordCountEvent);
-        this.dispatchEvent(pageCount);
-    }
- 
-    handleNextPage(event){
-        // if (this.pageNumber < this.totalPageCount) {
-        //     this.pageNumber = this.pageNumber + 1;
-        // }
-        this.pageNumber = this.pageNumber+1
-        // console.log('Current page' + this.pageNumber);
-        this.handleChange();
-
-    }
-
-    handlePrevPage(event){
-        if (this.pageNumber > 1) {
-            this.pageNumber = this.pageNumber - 1;
-        }
-        // console.log('Current page' + this.pageNumber);
-        this.handleChange();
-
-    }
 
     deleteColumn(event) {
         event.stopPropagation();
@@ -206,8 +162,6 @@ export default class Datatable extends LightningElement {
 
     /* Gets the data from the parent component and parses it into readable data */
     get columnDisplay() {
-        console.log(JSON.parse(JSON.stringify(this.columns)));
         return JSON.parse(JSON.stringify(this.columns));
-
     }
 }

@@ -24,7 +24,7 @@ export default class Row extends LightningElement {
             rowData.push(currentData);
         }
 
-        // console.log(currentRow);
+        console.log(currentRow);
 
         return rowData;
     }

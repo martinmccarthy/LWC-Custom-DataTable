@@ -1,11 +1,15 @@
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement } from 'lwc';
 import getDataList from '@salesforce/apex/DataTableController.getDataList';
 import getFields from '@salesforce/apex/DataTableController.getFields';
 
 export default class Holder extends LightningElement {
     /* EDIT HERE */
     options = [
-        { label: 'Weather Data', value: 'Weather_Data__c'},
+        { label: 'Contacts', value: 'Contact'},
+        { label: 'Opportunities', value: 'Opportunity'},
+        { label: 'Tasks', value: 'Task'},
+        { label: 'Accounts', value: 'Account'},
+        { label: 'Leads', value: 'Lead'}
     ]
     
     
@@ -29,22 +33,9 @@ export default class Holder extends LightningElement {
 
     columnModal = false;
 
-    @track numberOfRecords;
-
     connectedCallback() { 
         this.loadData();
         this.loadFields();
-    }
-
-    handleRecordCountValue(event){
-        this.numberOfRecords = event.detail
-        console.log('this is record count in holder', this.numberOfRecords);
-        this.loadData();
-    };
-
-    handlePageCountValue(event){
-        
-
     }
 
     /* Loads all the information requested based on the columns
@@ -56,9 +47,9 @@ export default class Holder extends LightningElement {
                 fieldsArr.push(this.columns[i].fieldName);
             }
         }
-        getDataList({fieldsArray: fieldsArr, sortQuery: this.currentSortedCol, sortOrder: this.sortOrder, dataType: this.dataType, numberOfRecords: this.numberOfRecords, pageNumber: 10 })
+        getDataList({fieldsArray: fieldsArr, sortQuery: this.currentSortedCol, sortOrder: this.sortOrder, dataType: this.dataType})
         .then(result => {
-            // console.log(result);
+            console.log(result);
             this.rows = result;
             //this.globalVar = resultArr;
         })
@@ -75,11 +66,8 @@ export default class Holder extends LightningElement {
         var currentObj;
         getFields({dataType: this.dataType})
         .then(result => {
-            // console.log('result' , JSON.parse(JSON.stringify(result)));
             Object.entries(result).forEach(entry => {
-                // console.log('entry log', entry);
                 currentObj = {
-                    label: entry[1][2],
                     fieldName: entry[0],
                     value: entry[1][1],
                     type: entry[1][0].toLowerCase()
@@ -106,7 +94,7 @@ export default class Holder extends LightningElement {
 
     handleColumnSort(event) {
         var index = event.detail;
-        // console.log(index);
+        console.log(index);
         this.columnReset = false;
         this.columns[index].sorted = true;
         if(this.currentSortedCol.length > 0) { // if we have a currently selected column already
@@ -130,7 +118,7 @@ export default class Holder extends LightningElement {
         else {
             this.sortOrder = 'ASC';
         }
-        // console.log(this.sortOrder);
+        console.log(this.sortOrder);
         this.currentSortedCol = this.columns[index].fieldName;
         this.loadData();
         this.columnReset = true;
@@ -165,12 +153,11 @@ export default class Holder extends LightningElement {
         if(this.newCol !== '') {
             this.columnReset = false;
             const selectedField = this.fieldOptions.find(field => field.value === this.newCol);
-            console.log('selected field',selectedField);
-            let label = selectedField.label// this adds a space in between the field name
-            // if(label.includes('.')) {
-            //     label = label.replaceAll('.', '');
-            // }
-          
+            let label = selectedField.fieldName.replace(/([A-Z])/g, ' $1').trim(); // this adds a space in between the field name
+            if(label.includes('.')) {
+                label = label.replaceAll('.', '');
+            }
+            console.log(label);
             colToAdd = {title: label, fieldName: selectedField.fieldName, type: selectedField.type, width: "width:300px"};
             this.columns.push(colToAdd);
             this.loadData();
@@ -206,20 +193,17 @@ export default class Holder extends LightningElement {
 
     selectChoice() {
         var colToAdd;
-    
         var selectedField = this.fieldOptions.find(field => field.fieldName === this.currentlySelectedColumn);
-
-        // console.log(selectedField);
-        var label = selectedField.label;
-        // if(label.includes('.')) {
-        //     label = label.replaceAll('.', '');
-        // }
+        var label = selectedField.fieldName.replace(/([A-Z])/g, ' $1').trim();
+        if(label.includes('.')) {
+            label = label.replaceAll('.', '');
+        }
         if(this.isSelected === true || this.isSelected === undefined) return; // if its in the selection array we aren't going to move it
         this.columnReset = false;
         colToAdd = {title: label, fieldName: selectedField.fieldName, type: selectedField.type, width: "width:300px"};
         this.columns.push(colToAdd);
         this.loadData();
-   
+        console.log(this.columns);
         this.columnReset = true;
         this.isSelected = undefined;
         let element = this.template.querySelector('[data-id="' + this.currentlySelectedColumn + '"]');
@@ -281,7 +265,7 @@ export default class Holder extends LightningElement {
     get selectedOptions() {
         var selectedOptions = [];
         for(let i = 0; i < this.columns.length; i++) {
-            selectedOptions.push({label: this.columns[i].fieldName, value: this.columns[i].fieldName});
+            selectedOptions.push({label: this.columns[i].title, value: this.columns[i].fieldName});
         }
 
         return selectedOptions;
