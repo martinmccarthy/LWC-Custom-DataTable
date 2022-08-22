@@ -20,7 +20,7 @@
         <lightning-formatted-address street={cellInfo.data.street}></lightning-formatted-address>
     </template>
     <template if:true={isPercent}>
-        <lightning-formatted-number value={cellInfo.data} format-style="percent-fixed"></lightning-formatted-number>
+        <lightning-formatted-number value={cellInfo.data} format-style="percent"></lightning-formatted-number>
     </template>
     <template if:true={isDecimal}>
         <lightning-formatted-number value={cellInfo.data} format-style="decimal"></lightning-formatted-number>
